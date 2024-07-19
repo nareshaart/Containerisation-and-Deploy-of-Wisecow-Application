@@ -27,10 +27,10 @@ jobs:
       - name: Docker Build and push
         run: |
           docker build -t tic-tac .
-          docker tag tic-tac-toe  naresh3451213/tic-tac-toe:latest   
+          docker tag tic-tac  naresh3451213/tic-tac:latest   
 
           
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker push naresh3451213/tic-tac-toe:latest
+          docker push naresh3451213/tic-tac:latest
         env:
           DOCKER_CLI_ACI: 1
