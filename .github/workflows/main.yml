@@ -1,25 +1,36 @@
-name: build-analyze-deploy
+name: Build,Analyze,scan
 
 on:
   push:
     branches:
       - main
 
+
 jobs:
   build-analyze-scan:
     name: Build
     runs-on: [self-hosted]
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-      with:
-        fetch-depth: 0  # Shallow clones should be disabled for better analysis relevancy
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysi
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v3
+          
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD}}
 
-    - name: Docker Build and push
-      run: |
-        docker build -t naresh3451213/wiseow-app:latest .
-        docker tag wisecow-app naresh3451213/wiseow-app:latest
-        docker push naresh3451213/wiseow-app:latest
+       
+      - name: Docker Build and push
+        run: |
+          docker build -t tic-tac-toe .
+          docker tag tic-tac-toe  naresh3451213/tic-tac-toe:latest   
+
+          
+          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+          docker push naresh3451213/tic-tac-toe:latest
+        env:
+          DOCKER_CLI_ACI: 1
