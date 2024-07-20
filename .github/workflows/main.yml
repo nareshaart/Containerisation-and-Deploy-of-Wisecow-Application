@@ -1,36 +1,58 @@
-name: Build,Analyze,scan
-
 on:
   push:
     branches:
       - main
 
-
 jobs:
-  build-analyze-scan:
-    name: Build
+  build:
+    name: Build Image
     runs-on: [self-hosted]
+    
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysi
+          fetch-depth: 0
 
-          
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD}}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
 
-       
-      - name: Docker Build and push
+      - name: Build and Push Image
         run: |
-          docker build -t tic-tac-toe .
-          docker tag tic-tac-toe  naresh3451213/tic:latest   
-
+          docker build -t naresh3451213/wisecow-app:latest .
+          docker push naresh3451213/wisecow-app:latest
           
-          docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker push naresh3451213/tic:latest
-        env:
-          DOCKER_CLI_ACI: 1
+
+
+
+  
+  deploy:  # Consider a separate job for deployment
+    name: Deploy to Kubernetes
+    runs-on: [self-hosted]
+    needs: build  # Or analyze if included
+    steps:
+      - uses: actions/checkout@v2
+
+
+      - name: Pull Deployment Image
+        run: docker pull naresh3451213/wisecow-app:latest
+        
+      - name: Deploy to container
+        run: docker run -d --name wisecowwwap -p 1232:1232 naresh3451213/wisecow-app:latest
+
+     
+
+      - name: Update Kubeconfig
+        run: aws eks --region us-west-2 update-kubeconfig --name EKS_CLOUD
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f nareshdeployment.yaml
+        
+       
+  
+
+   
+
+ 
