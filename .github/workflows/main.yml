@@ -40,7 +40,7 @@ jobs:
         run: docker pull naresh3451213/wisecow-app:latest
         
       - name: Deploy to container
-        run: docker run -d --name wisecowwwap -p 1232:1232 naresh3451213/wisecow-app:latest
+        run: docker run -d --name wisecowwwwap -p 1237:1237 naresh3451213/wisecow-app:latest
 
      
 
