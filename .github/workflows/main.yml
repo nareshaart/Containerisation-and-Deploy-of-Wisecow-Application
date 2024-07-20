@@ -26,11 +26,11 @@ jobs:
        
       - name: Docker Build and push
         run: |
-          docker build -t awsdev .
-          docker tag awsdev  ramnan/awsdev:latest   
+          docker build -t tic-tac-toe .
+          docker tag tic-tac-toe  naresh3451213/tic:latest   
 
           
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker push ramnan/awsdev:latest
+          docker push naresh3451213/tic:latest
         env:
           DOCKER_CLI_ACI: 1
