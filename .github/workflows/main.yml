@@ -27,10 +27,10 @@ jobs:
       - name: Docker Build and push
         run: |
           docker build -t awsdev .
-          docker tag awsdev  naresh3451213/awsdev:latest   
+          docker tag awsdev  ramnan/awsdev:latest   
 
           
           docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-          docker push naresh3451213/awsdev:latest
+          docker push ramnan/awsdev:latest
         env:
           DOCKER_CLI_ACI: 1
